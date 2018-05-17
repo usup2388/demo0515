@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.sysco.performance.engineering</groupId>
+    <artifactId>sysco.com.perf.testing</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <packaging>pom</packaging>
+    <name>sysco.com.perf.testing</name>
+    <url>http://maven.apache.org</url>
+    <properties>
+        <perf.testplan>*</perf.testplan>
+        <xms.setting>1024</xms.setting>
+        <xmx.setting>1024</xmx.setting>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.lazerycode.jmeter</groupId>
+                <artifactId>jmeter-maven-plugin</artifactId>
+                <version>2.7.0</version>
+                <executions>
+                    <execution>
+                        <id>jmeter-tests</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jmeter</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>kg.apc</groupId>
+                        <artifactId>jmeter-plugins-extras-libs</artifactId>
+                        <version>1.2.0</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+
+                    <!--
+                        Specify the .jmx (JMeter) files that wanted to be run
+
+                        Note:
+                        If specify multiple jmx files here, files will be executed in
+                        a sequence order
+                    -->
+                    <testFilesIncluded>
+                        <jMeterTestFile>SyscoPerf10040.jmx</jMeterTestFile>
+                    </testFilesIncluded>
+e
+                    <!--
+                        Specify the .jmx (JMeter) files that do not wanted (exclude) to be run
+                    -->
+                    <testFilesExcluded>
+                        <jMeterTestFile>ExcludeFile01.jmx</jMeterTestFile>
+                        <jMeterTestFile>ExcludeFile02.jmx</jMeterTestFile>
+                    </testFilesExcluded>
+
+                    <!--
+                        If you only wanted to distribute the load within the one or two load generator(s),
+                         specify the (Load Generator) IPs within the "<serverList>" section
+
+                         Currently valid IPs are: 10.168.141.76, 10.168.142.128, 10.168.139.126
+
+                         LoadGenerator_01 : 10.168.141.76
+                         LoadGenerator_02 : 10.168.142.128
+                         LoadGenerator_03 : 10.168.139.126
+                   -->
+                    <remoteConfig>
+                        <startServersBeforeTests>true</startServersBeforeTests>
+                        <serverList>10.168.133.191:8080</serverList>
+                        <stopServersAfterTests>true</stopServersAfterTests>
+                    </remoteConfig>
+
+                    <!--
+                        If you need to add any property changes to the jmeter system.property file
+                         added it within the "<propertiesSystem>" section
+                    -->
+                    <propertiesSystem>
+                    </propertiesSystem>
+
+
+                    <!--
+                        If you need to add any property changes to the jmeter jmeter.property file
+                         added it within the "<propertiesJMeter>" section
+                    -->
+                    <propertiesJMeter>
+                        <remote_hosts>10.168.141.76,10.168.142.128,10.168.139.126</remote_hosts>
+                        <client.rmi.localport>5060</client.rmi.localport>
+                    </propertiesJMeter>
+                    <propertiesUser>
+                        <server.rmi.ssl.disable>true</server.rmi.ssl.disable>
+                    </propertiesUser>
+
+                    <!--
+                        If you need to add any additional plugins to the jmeter
+                         added it within the "<jmeterExtensions>" section
+                    -->
+                    <jmeterExtensions>
+                        <artifact>kg.apc:jmeter-plugins-autostop:0.1</artifact>
+                        <artifact>kg.apc:jmeter-plugins-casutg:2.5</artifact>
+                        <artifact>kg.apc:jmeter-plugins-csvars:0.1</artifact>
+                        <artifact>kg.apc:jmeter-plugins-functions:2.0</artifact>
+                        <artifact>kg.apc:jmeter-plugins-manager:0.19</artifact>
+                        <artifact>kg.apc:jmeter-plugins-perfmon:2.1</artifact>
+                        <artifact>kg.apc:jmeter-plugins-prmctl:0.3</artifact>
+                        <artifact>kg.apc:jmeter-plugins-tst:2.1</artifact>
+                        <artifact>kg.apc:jmeter-plugins-webdriver:2.3</artifact>
+                    </jmeterExtensions>
+
+                    <!--
+                        The plugin uses some broken dependencies
+                         An alternative is to set this to true and use excludedArtifacts, see below
+                    -->
+                    <downloadExtensionDependencies>true</downloadExtensionDependencies>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <organization>
+        <name>Sysco Performance Engineering</name>
+        <url>http://www.sysco.com/</url>
+    </organization>
+
+</project>
